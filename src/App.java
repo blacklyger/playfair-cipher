@@ -2,17 +2,6 @@ import java.util.*;
 
 public class App {
 
-    static char[][] arr = {
-            { 'A', 'B', 'C', 'D', 'E' },
-            { 'F', 'G', 'H', 'I', 'K' },
-            { 'L', 'M', 'N', 'O', 'P' },
-            { 'Q', 'R', 'S', 'T', 'U' },
-            { 'V', 'W', 'X', 'Y', 'Z' }
-    };
-
-    Scanner scanner = new Scanner(System.in);
-    String mystuff = scanner.nextLine();
-
     public static char[][] generate_playfair_square(String key_input) {
 
         char[][] square = new char[5][5];
@@ -81,11 +70,11 @@ public class App {
         return ret.split("(?<=\\G.{2})");
     }
 
-    public static HashMap<String, Integer> search_letter(char letter) {
+    public static HashMap<String, Integer> search_letter(char[][] playfair_square, char letter) {
 
-        for (int i = 0; i < arr.length; i++) {
-            for (int j = 0; j < arr[i].length; j++) {
-                if (letter == arr[i][j]) {
+        for (int i = 0; i < playfair_square.length; i++) {
+            for (int j = 0; j < playfair_square[i].length; j++) {
+                if (letter == playfair_square[i][j]) {
                     HashMap<String, Integer> map = new HashMap<String, Integer>();
                     map.put("i", i);
                     map.put("j", j);
@@ -97,13 +86,13 @@ public class App {
         throw new Error("Letter could not be found!");
     }
 
-    public static List<HashMap<String, Integer>> get_letter_indices(String plaintext) {
+    public static List<HashMap<String, Integer>> get_letter_indices(char[][] playfair_square, String plaintext) {
 
         List<HashMap<String, Integer>> ret = new ArrayList<HashMap<String, Integer>>();
 
         for (int i = 0; i < plaintext.length(); i++) {
             char letter = plaintext.charAt(i);
-            ret.add(search_letter(letter));
+            ret.add(search_letter(playfair_square, letter));
         }
 
         return ret;
@@ -145,7 +134,7 @@ public class App {
         String ret = new String();
 
         for (int i = 0; i < blocks.length; i++) {
-            List<HashMap<String, Integer>> map = get_letter_indices(blocks[i]);
+            List<HashMap<String, Integer>> map = get_letter_indices(playfair_square, blocks[i]);
 
             HashMap<String, Integer> first_char = map.get(0);
             HashMap<String, Integer> second_char = map.get(1);
