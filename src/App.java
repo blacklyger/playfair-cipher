@@ -106,17 +106,17 @@ public class App {
         return playfair_square[i][left ? (((j - dst) % 5) + 5) % 5 : (j + dst) % 5];
     }
 
-    public static String first_rule(char[][] playfair_square, HashMap<String, Integer> first_char, HashMap<String, Integer> second_char) {
+    public static String first_rule(char[][] playfair_square, HashMap<String, Integer> first_char, HashMap<String, Integer> second_char, boolean up) {
         String ret = "";
-        ret += letter_vertical(playfair_square, first_char.get("i"), first_char.get("j"), 1, false);
-        ret += letter_vertical(playfair_square, second_char.get("i"), second_char.get("j"), 1, false);
+        ret += letter_vertical(playfair_square, first_char.get("i"), first_char.get("j"), 1, up);
+        ret += letter_vertical(playfair_square, second_char.get("i"), second_char.get("j"), 1, up);
         return ret;
     }
 
-    public static String second_rule(char[][] playfair_square, HashMap<String, Integer> first_char, HashMap<String, Integer> second_char) {
+    public static String second_rule(char[][] playfair_square, HashMap<String, Integer> first_char, HashMap<String, Integer> second_char, boolean left) {
         String ret = "";
-        ret += letter_horizontal(playfair_square, first_char.get("i"), first_char.get("j"), 1, false);
-        ret += letter_horizontal(playfair_square, second_char.get("i"), second_char.get("j"), 1, false);
+        ret += letter_horizontal(playfair_square, first_char.get("i"), first_char.get("j"), 1, left);
+        ret += letter_horizontal(playfair_square, second_char.get("i"), second_char.get("j"), 1, left);
         return ret;
     }
 
@@ -127,7 +127,7 @@ public class App {
         return ret;
     }
 
-    public static String determine_rule(String message, char[][] playfair_square) {
+    public static String determine_rule(String message, char[][] playfair_square, boolean decrypt) {
 
         String[] blocks = group_two(message);
 
@@ -140,9 +140,9 @@ public class App {
             HashMap<String, Integer> second_char = map.get(1);
 
             if (first_char.get("j").equals(second_char.get("j"))) {
-                ret += first_rule(playfair_square, first_char, second_char);
+                ret += first_rule(playfair_square, first_char, second_char, decrypt);
             } else if (first_char.get("i").equals(second_char.get("i"))) {
-                ret += second_rule(playfair_square, first_char, second_char);
+                ret += second_rule(playfair_square, first_char, second_char, decrypt);
             } else {
                 ret += third_rule(playfair_square, first_char, second_char);
             }
@@ -153,7 +153,12 @@ public class App {
 
     public static String encrypt(String message, String square_key) {
         char[][] playfair_square = generate_playfair_square(square_key);
-        return determine_rule(message, playfair_square);
+        return determine_rule(message, playfair_square, false);
+    }
+
+    public static String decrypt(String message, String square_key) {
+        char[][] playfair_square = generate_playfair_square(square_key);
+        return determine_rule(message, playfair_square, true);
     }
 
     public static void main(String[] args) throws Exception {
@@ -166,5 +171,8 @@ public class App {
 
         String encrypted = encrypt(input, square_key);      
         System.out.println(encrypted);
+
+        String decrypted = decrypt(encrypted, square_key);
+        System.out.println(decrypted);
     }
 }
