@@ -70,6 +70,12 @@ src/App.java            Command line interface (arguments or interactive mode)
 test/PlayfairTest.java  Dependency-free tests
 ```
 
+## Project history
+
+- **2022-02-23**: Key square generation and encryption
+- **2022-02-24**: Decryption
+- **2026-10-24**: Bug fixes, separate cipher class, command line interface, tests and documentation
+
 ## Fixes in the current version
 
 - The program crashed whenever input was piped in, because two `Scanner` objects were created on `System.in`. It now uses a single `Scanner` and also accepts command-line arguments.
